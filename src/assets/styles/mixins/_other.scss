@@ -1,0 +1,176 @@
+@mixin pseudo($display: block, $pos: absolute, $content: '') {
+  position: $pos;
+
+  display: $display;
+
+  content: $content;
+}
+
+@mixin middle-inline-block() {
+  display: inline-block;
+
+  vertical-align: middle;
+}
+
+@mixin css-triangle(
+  $color,
+  $direction,
+  $size: 6px,
+  $position: absolute,
+  $round: false,
+  $size-y: $size
+) {
+  @include pseudo($pos: $position);
+  width: 0;
+  height: 0;
+
+  @if $round {
+    border-radius: $border-radius;
+  }
+
+  @if $direction == down {
+    border-left: $size solid transparent;
+    border-right: $size solid transparent;
+    border-top: $size solid $color;
+
+    margin-top: 0 - round($size / 2.5);
+  } @else if $direction == up {
+    border-left: $size solid transparent;
+    border-right: $size solid transparent;
+    border-bottom: $size solid $color;
+
+    margin-bottom: 0 - round($size / 2.5);
+  } @else if $direction == right {
+    border-top: $size solid transparent;
+    border-bottom: $size solid transparent;
+    border-left: $size-y solid $color;
+
+    margin-right: -$size;
+  } @else if $direction == left {
+    border-top: $size solid transparent;
+    border-bottom: $size solid transparent;
+    border-right: $size solid $color;
+
+    margin-left: -$size;
+  }
+}
+
+@mixin input-placeholder {
+  &.placeholder {
+    @content;
+  }
+
+  &::placeholder {
+    @content;
+  }
+}
+
+@mixin flex-container(
+  $direction: row,
+  $justifyContent: center,
+  $alignContent: center,
+  $alignItems: center
+) {
+  display: flex;
+  align-content: $alignContent;
+  align-items: $alignItems;
+  flex-direction: $direction;
+  flex-wrap: nowrap;
+  justify-content: $justifyContent;
+}
+
+@mixin truncate($truncation-boundary) {
+  overflow: hidden;
+
+  max-width: $truncation-boundary;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+$spaceamounts: (
+  5,
+  10,
+  15,
+  20,
+  30,
+  40,
+  50
+); // Adjust this to include the pixel amounts you need.
+$sides: (top, bottom, left, right); // Leave this variable alone
+
+@each $space in $spaceamounts {
+  @each $side in $sides {
+    .m#{str-slice($side, 0, 1)}#{$space} {
+      margin-#{$side}: #{$space}px; //; // !important;
+    }
+    // .p-#{str-slice($side, 0, 1)}-#{$space} {
+    //   padding-#{$side}: #{$space}px; // !important;
+    // }
+  }
+}
+
+@mixin form-item {
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+  line-height: $line-height-base;
+}
+
+%form-item {
+  @include form-item;
+}
+
+%transition {
+  transition: all 0.5s ease;
+}
+
+@mixin placeholder {
+  &::-webkit-input-placeholder {
+    @content;
+  }
+  &:-moz-placeholder {
+    @content;
+  }
+  &::-moz-placeholder {
+    @content;
+  }
+  &:-ms-input-placeholder {
+    @content;
+  }
+}
+
+@mixin pl-shift($side: left, $position: 500px, $duration: 200ms) {
+  @include placeholder {
+    text-indent: 0;
+    transition: text-indent $duration;
+  }
+  &:focus {
+    @include placeholder {
+      text-indent: if($side == left, -$position, $position);
+    }
+  }
+}
+
+@mixin pl-slide-down($position: 5, $duration: 200ms) {
+  @include placeholder {
+    line-height: 1;
+    transition: line-height $duration;
+  }
+  &:focus {
+    @include placeholder {
+      line-height: $position;
+    }
+  }
+}
+
+@mixin pl-fade-out($duration: 200ms) {
+  @include placeholder {
+    opacity: 1;
+    transition: opacity $duration;
+  }
+  &:focus {
+    @include placeholder {
+      opacity: 0;
+    }
+  }
+}

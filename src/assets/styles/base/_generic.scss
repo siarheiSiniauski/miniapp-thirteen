@@ -1,0 +1,166 @@
+$body-family: $font-family-base;
+$body-weight: $font-weight-normal;
+$body-line-height: normal;
+$body-bg: #111;
+$body-size: 14px;
+$body-color: #fff;
+$header-family: $font-family-base;
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  overflow-x: hidden;
+  overflow-y: scroll;
+  font-size: $body-size;
+  text-size-adjust: 100%;
+}
+
+article,
+aside,
+figure,
+footer,
+header,
+hgroup,
+section {
+  display: block;
+}
+
+h1,
+h2,
+header {
+  font-family: $header-family;
+}
+
+h1,
+h2 {
+  margin-bottom: 0.5rem;
+}
+
+a {
+  text-decoration: none;
+
+  strong {
+    color: currentColor;
+  }
+}
+
+input,
+select,
+textarea,
+button {
+  border: none;
+  outline: none;
+  background-color: transparent;
+
+  &:hover,
+  &:focus,
+  &:active {
+    outline: none;
+  }
+
+  &[disabled] {
+    pointer-events: none;
+  }
+}
+
+input,
+select,
+textarea {
+  outline: none;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+input:-webkit-autofill {
+  -webkit-background-clip: text;
+}
+
+input,
+select,
+textarea {
+  outline: none;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+body {
+  overflow-x: hidden;
+  color: $body-color;
+  background: $body-bg;
+  font-family: $body-family;
+  font-size: $body-size;
+  font-weight: $body-weight;
+  font-style: normal;
+  line-height: $body-line-height;
+  position: relative;
+}
+
+body,
+html {
+  &.hidden {
+    overflow: hidden;
+  }
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+label,
+p {
+  margin-bottom: 0;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+
+  &:hover,
+  &:focus,
+  &:active {
+    outline: none;
+  }
+}
+
+a {
+  text-decoration: none;
+  outline: none;
+
+  &:hover,
+  &:focus,
+  &:active {
+    text-decoration: none;
+    outline: none;
+  }
+}
+
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+input[type='number']:hover,
+input[type='number']:focus {
+  -moz-appearance: number-input;
+}
+
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

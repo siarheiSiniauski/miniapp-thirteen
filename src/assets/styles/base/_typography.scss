@@ -1,0 +1,37 @@
+h1,
+h2,
+h3,
+h4,
+h5 {
+  margin: 0;
+}
+
+h1 {
+  font-size: 46px;
+  font-weight: normal;
+  line-height: 120%;
+}
+
+h2 {
+  font-size: 25px;
+  font-weight: $font-weight-bold;
+  line-height: 1.1;
+}
+
+h3 {
+  font-size: 25px;
+  font-weight: $font-weight-medium;
+  line-height: 1.1;
+}
+
+h4 {
+  font-size: $font-size-xlg;
+  font-weight: $font-weight-medium;
+  line-height: 1.1;
+}
+
+h5 {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-medium;
+  line-height: 1.1;
+}
