@@ -160,40 +160,40 @@ export const Round: FC = () => {
     }
   }, [shooters]);
 
-  useEffect(() => {
-    let timer = 0;
-    const interval = Math.floor(Math.random() * 1000);
+  // useEffect(() => {
+  //   let timer = 0;
+  //   const interval = Math.floor(Math.random() * 1000);
 
-    const current = shooters.find(
-      (el) => el.status === 'WAITING' && user && el.number !== user.number
-    );
+  //   const current = shooters.find(
+  //     (el) => el.status === 'WAITING' && user && el.number !== user.number
+  //   );
 
-    if (current && user) {
-      const position = shooters.findIndex((el) => el.number === current.number);
-      timer = setInterval(() => {
-        const arr = shooters.map((el, i) => {
-          if (i === position) {
-            return {
-              ...el,
-              status: 'READY',
-            };
-          }
+  //   if (current && user) {
+  //     const position = shooters.findIndex((el) => el.number === current.number);
+  //     timer = setInterval(() => {
+  //       const arr = shooters.map((el, i) => {
+  //         if (i === position) {
+  //           return {
+  //             ...el,
+  //             status: 'READY',
+  //           };
+  //         }
 
-          return {
-            ...el,
-            status: el.status === 'DEAD' ? 'DEAD' : el.status,
-          };
-        });
+  //         return {
+  //           ...el,
+  //           status: el.status === 'DEAD' ? 'DEAD' : el.status,
+  //         };
+  //       });
 
-        setShooters(arr);
-      }, interval);
-    } else {
-      clearInterval(timer);
-    }
+  //       setShooters(arr);
+  //     }, interval);
+  //   } else {
+  //     clearInterval(timer);
+  //   }
 
-    // очистка интервала
-    return () => clearInterval(timer);
-  }, [shooters, user]);
+  //   // очистка интервала
+  //   return () => clearInterval(timer);
+  // }, [shooters, user]);
 
   useEffect(() => {
     const position = data.findIndex((el) => el.active);

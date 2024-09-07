@@ -1,11 +1,6 @@
 import { FC, ReactNode, useEffect } from 'react';
 import { cn } from '@bem-react/classname';
-import dayjs from 'dayjs';
-import {
-  InitData,
-  initInitData,
-  useLaunchParams,
-} from '@telegram-apps/sdk-react';
+import { initInitData, useLaunchParams } from '@telegram-apps/sdk-react';
 
 import { useAppDispatch } from '@/core/store/hooks';
 import { verifyUserThunk } from '@/core/services/App/store/AppSlice';
