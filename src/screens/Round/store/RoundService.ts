@@ -1,11 +1,18 @@
 import { http } from '@/utils/http';
-import { IJoinGameData } from './RoundInterface';
+import { IRound } from './RoundInterface';
+import { AxiosResponse } from 'axios';
 
 class RoundService {
-  async joinGame(data: IJoinGameData): Promise<any> {
-    const res = await http.post(`/games/join`, data);
-
+  async getRound(roundId: string): Promise<IRound> {
+    const res = await http.get<IRound>(`/rounds/${roundId}`);
     return res.data;
+  }
+
+  async countByGameId(gameId: string): Promise<number> {
+    const res = await http.get<string, AxiosResponse<{ count: number }>>(
+      `/rounds/count/${gameId}`
+    );
+    return res.data.count;
   }
 }
 

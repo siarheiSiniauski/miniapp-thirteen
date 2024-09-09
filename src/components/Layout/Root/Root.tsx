@@ -3,10 +3,10 @@ import { cn } from '@bem-react/classname';
 import { initInitData, useLaunchParams } from '@telegram-apps/sdk-react';
 
 import { useAppDispatch } from '@/core/store/hooks';
-import { verifyUserThunk } from '@/core/services/App/store/AppSlice';
 
 import './Root.scss';
 import { useTranslation } from 'react-i18next';
+import { verifyUserThunk } from '@/core/services/App/AppSlice';
 
 const cnRoot = cn('Root');
 

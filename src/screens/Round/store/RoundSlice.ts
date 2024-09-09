@@ -1,20 +1,33 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import RoundService from './RoundService';
-import { IJoinGameData } from './RoundInterface';
+import { IRound } from './RoundInterface';
 
-interface RoomsState {
-  data: any;
+interface RoundState {
+  round: IRound | null;
+  count: number;
 }
 
-const initialState: RoomsState = {
-  data: null,
+const initialState: RoundState = {
+  round: null,
+  count: 1,
 };
 
-export const joinGameThunk = createAsyncThunk(
-  'round/joinGameThunk',
-  async (data: IJoinGameData, { rejectWithValue }) => {
+export const getRoundThunk = createAsyncThunk(
+  'round/getRoundThunk',
+  async (roundId: string, { rejectWithValue }) => {
     try {
-      return await RoundService.joinGame(data);
+      return await RoundService.getRound(roundId);
+    } catch (errors) {
+      return rejectWithValue(errors);
+    }
+  }
+);
+
+export const countByGameIdThunk = createAsyncThunk(
+  'round/countByGameIdThunk',
+  async (gameId: string, { rejectWithValue }) => {
+    try {
+      return await RoundService.countByGameId(gameId);
     } catch (errors) {
       return rejectWithValue(errors);
     }
@@ -27,14 +40,17 @@ const roundSlice = createSlice({
   reducers: {},
 
   extraReducers: (builder) => {
-    builder;
+    builder
+      .addCase(getRoundThunk.fulfilled, (state, action) => {
+        state.round = action.payload;
+      })
+      .addCase(getRoundThunk.rejected, (state) => {
+        state.round = null;
+      })
 
-    // .addCase(getRoomsThunk.fulfilled, (state, action) => {
-    //   state.rooms = action.payload;
-    // })
-    // .addCase(getRoomsThunk.rejected, (state) => {
-    //   state.rooms = [];
-    // });
+      .addCase(countByGameIdThunk.fulfilled, (state, action) => {
+        state.count = action.payload;
+      });
   },
 });
 

@@ -11,108 +11,27 @@ import patrons from '../../assets/img/thirteen/patrons.png';
 import revolver from '../../assets/img/thirteen/revolver.png';
 
 import './styles/Round.scss';
-const data = [
-  {
-    number: 1,
-    name: '1',
-    avatar: '/img/thirteen/1.png',
-    status: 'WAITING',
-    active: false,
-  },
-  {
-    number: 2,
-    name: '2',
-    avatar: '/img/thirteen/2.png',
-    status: 'READY',
-    active: false,
-  },
-  {
-    number: 3,
-    name: '3',
-    avatar: '/img/thirteen/3.png',
-    status: 'WAITING',
-    active: false,
-  },
-  {
-    number: 4,
-    name: '4',
-    avatar: '/img/thirteen/4.png',
-    status: 'READY',
-    active: false,
-  },
-  {
-    number: 5,
-    name: '2',
-    avatar: '/img/thirteen/5.png',
-    status: 'WAITING',
-    active: false,
-  },
-  {
-    number: 6,
-    name: '3',
-    avatar: '/img/thirteen/6.png',
-    status: 'WAITING',
-    active: false,
-  },
-  {
-    number: 7,
-    name: '1',
-    avatar: '/img/thirteen/7.png',
-    status: 'WAITING',
-    active: true,
-  },
-  {
-    number: 8,
-    name: '2',
-    avatar: '/img/thirteen/8.png',
-    status: 'WAITING',
-    active: false,
-  },
-  {
-    number: 9,
-    name: '3',
-    avatar: '/img/thirteen/9.png',
-    status: 'WAITING',
-    active: false,
-  },
-
-  {
-    number: 10,
-    name: '1',
-    avatar: '/img/thirteen/10.png',
-    status: 'WAITING',
-    active: false,
-  },
-  {
-    number: 11,
-    name: '2',
-    avatar: '/img/thirteen/11.png',
-    status: 'WAITING',
-    active: false,
-  },
-  {
-    number: 12,
-    name: '3',
-    avatar: '/img/thirteen/12.png',
-    status: 'WAITING',
-    active: false,
-  },
-  {
-    number: 13,
-    name: '3',
-    avatar: '/img/thirteen/13.png',
-    status: 'WAITING',
-    active: false,
-  },
-];
+import { useParams } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '@/core/store/hooks';
+import { gameSelector } from '@/core/services/Game/GameSelector';
+import { getGameThunk } from '@/core/services/Game/GameSlice';
+import { countByGameIdThunk, getRoundThunk } from './store/RoundSlice';
+import { countSelector, roundSelector } from './store/RoundSelector';
+import { useInitData } from '@telegram-apps/sdk-react';
 
 const cnRound = cn('Round');
 
 export const Round: FC = () => {
+  const dispatch = useAppDispatch();
+  const initData = useInitData();
+  const { gameId, roundId } = useParams<{ gameId: string; roundId: string }>();
   const { play } = useAudio({
     url: audioSrc,
     initialVolume: 1,
   });
+
+  const round = useAppSelector(roundSelector);
+  const count = useAppSelector(countSelector);
 
   const [patron, setPatron] = useState<number>(1);
   const [shooters, setShooters] = useState<any[]>([]);
@@ -121,9 +40,27 @@ export const Round: FC = () => {
   const [status, setStatus] = useState<
     'WAITING' | 'READY' | 'GAME' | 'GAME_OVER'
   >('WAITING');
-  const [round, setRound] = useState<'ONE' | 'TWO' | 'THREE' | 'FOR'>('ONE');
+  // const [round, setRound] = useState<'ONE' | 'TWO' | 'THREE' | 'FOR'>('ONE');
   const [user, setUser] = useState<any | null>(null);
   const [discharge, setDischarge] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (roundId) {
+      getRound(roundId);
+    }
+  }, [roundId]);
+
+  const getRound = async (roundId: string) => {
+    try {
+      const res = await dispatch(getRoundThunk(roundId)).unwrap();
+
+      if (res) {
+        await dispatch(countByGameIdThunk(res.gameId)).unwrap();
+      }
+    } catch (error) {
+      console.log('getRoundThunk', error);
+    }
+  };
 
   useEffect(() => {
     if (!user) {
@@ -134,204 +71,27 @@ export const Round: FC = () => {
   }, [shooters, user]);
 
   useEffect(() => {
-    const current = shooters.filter((el) => el.status === 'READY');
+    if (round && initData && initData.user && initData.user.id) {
+      const telegramId = initData.user.id;
+      const participants = round.participants;
 
-    let isGood = false;
-    if (round === 'ONE' && current.length === 13) {
-      isGood = true;
-    } else if (round === 'TWO' && current.length === 8) {
-      isGood = true;
-    } else if (round === 'THREE' && current.length === 3) {
-      isGood = true;
-    } else if (round === 'FOR' && current.length === 2) {
-      isGood = true;
+      const position = participants.findIndex(
+        (el) => el.telegramId === telegramId
+      );
+
+      const prev = participants.slice(0, position);
+      const last = participants.slice(position, participants.length);
+
+      setShooters([...last, ...prev].reverse());
     }
-    // else if (round === 'FOR' && current.length === 1) {
-    //   setStatus('GAME_OVER')
-    // }
+  }, [round, initData]);
 
-    if (isGood) {
-      setStatus('GAME');
-      const interval = Math.floor(Math.random() * 10000);
+  const resetUser = () => {};
 
-      setTimeout(() => {
-        setActiveLamp(true);
-      }, interval);
-    }
-  }, [shooters]);
+  const onAction = () => {};
 
-  // useEffect(() => {
-  //   let timer = 0;
-  //   const interval = Math.floor(Math.random() * 1000);
-
-  //   const current = shooters.find(
-  //     (el) => el.status === 'WAITING' && user && el.number !== user.number
-  //   );
-
-  //   if (current && user) {
-  //     const position = shooters.findIndex((el) => el.number === current.number);
-  //     timer = setInterval(() => {
-  //       const arr = shooters.map((el, i) => {
-  //         if (i === position) {
-  //           return {
-  //             ...el,
-  //             status: 'READY',
-  //           };
-  //         }
-
-  //         return {
-  //           ...el,
-  //           status: el.status === 'DEAD' ? 'DEAD' : el.status,
-  //         };
-  //       });
-
-  //       setShooters(arr);
-  //     }, interval);
-  //   } else {
-  //     clearInterval(timer);
-  //   }
-
-  //   // очистка интервала
-  //   return () => clearInterval(timer);
-  // }, [shooters, user]);
-
-  useEffect(() => {
-    const position = data.findIndex((el) => el.active);
-
-    const prev = data.slice(0, position);
-    const last = data.slice(position, data.length);
-
-    setShooters([...last, ...prev].reverse());
-  }, []);
-
-  const resetUser = () => {
-    let arr: any[] = [];
-
-    switch (round) {
-      case 'ONE':
-        {
-          setRound('TWO');
-          arr = shooters.map((el, i) => {
-            if (i === 0 || i === 3 || i === 5 || i === 7 || i === 11) {
-              return {
-                ...el,
-                status: 'DEAD',
-              };
-            }
-
-            return {
-              ...el,
-              status: el.status === 'DEAD' ? 'DEAD' : 'WAITING',
-            };
-          });
-
-          setShooters(arr);
-        }
-        break;
-      case 'TWO':
-        {
-          setRound('THREE');
-          arr = shooters.map((el, i) => {
-            if (i === 1 || i === 2 || i === 4 || i === 6 || i === 10) {
-              return {
-                ...el,
-                status: 'DEAD',
-              };
-            }
-
-            return {
-              ...el,
-              status: el.status === 'DEAD' ? 'DEAD' : 'WAITING',
-            };
-          });
-
-          setShooters(arr);
-        }
-        break;
-
-      case 'THREE':
-        {
-          setRound('FOR');
-          arr = shooters.map((el, i) => {
-            if (i === 9) {
-              return {
-                ...el,
-                status: 'DEAD',
-              };
-            }
-
-            return {
-              ...el,
-              status: el.status === 'DEAD' ? 'DEAD' : 'WAITING',
-            };
-          });
-
-          setShooters(arr);
-        }
-        break;
-      case 'FOR':
-        {
-          setRound('FOR');
-
-          arr = shooters.map((el, i) => {
-            if (i === 8) {
-              return {
-                ...el,
-                status: 'DEAD',
-              };
-            }
-
-            return {
-              ...el,
-              status: el.status === 'DEAD' ? 'DEAD' : 'WAITING',
-            };
-          });
-
-          setShooters(arr);
-        }
-        break;
-    }
-
-    setDischarge(false);
-    setPatron(patron + 1);
-    setActiveLamp(false);
-    setStatus('WAITING');
-
-    const current = arr.find((el) => el.number === user.number);
-
-    if (current) setUser(current);
-
-    setShooters(arr);
-  };
-
-  const onAction = () => {
-    if (user.status === 'WAITING') {
-      const arr = shooters.map((el) => {
-        if (el.number === user.number) {
-          const item = {
-            ...el,
-            status: 'READY',
-          };
-          setUser(item);
-          return item;
-        }
-
-        return el;
-      });
-
-      setShooters(arr);
-    }
-
-    if (status === 'GAME' && activeLamp) {
-      setDischarge(true);
-
-      play();
-
-      setTimeout(() => {
-        resetUser();
-      }, 3000);
-    }
-  };
+  console.log('round', round);
+  console.log('count', count);
 
   return (
     <div className={cnRound()}>
@@ -350,6 +110,7 @@ export const Round: FC = () => {
             fill="#B80000"
           />
         </svg>
+
         <Lamp className={cnRound('lamp')} active={activeLamp} />
 
         <div
@@ -370,7 +131,7 @@ export const Round: FC = () => {
               <img src={patrons} alt="patrons" />
             </div>
 
-            <div className={cnRound('patron')}>{patron}/7</div>
+            <div className={cnRound('patron')}>{count}/6</div>
           </div>
         </div>
 

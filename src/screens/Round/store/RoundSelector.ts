@@ -2,8 +2,14 @@ import { createSelector } from '@reduxjs/toolkit';
 
 import { RootState } from '@/core/store/store';
 
-const rooms = (state: RootState) => state.roomsReducer;
-export const roomsSelector = createSelector(
-  rooms,
-  (roomsReducer) => roomsReducer.rooms
+const round = (state: RootState) => state.roundsReducer;
+export const roundSelector = createSelector(
+  round,
+  (roundsReducer) => roundsReducer.round
+);
+
+const count = (state: RootState) => state.roundsReducer;
+export const countSelector = createSelector(
+  count,
+  (roundsReducer) => roundsReducer.count
 );

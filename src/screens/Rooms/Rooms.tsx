@@ -1,17 +1,19 @@
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { cn } from '@bem-react/classname';
+import { initInitData } from '@telegram-apps/sdk-react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
-import { ThirteenTop } from './components/ThirteenTop';
-
-import './styles/Rooms.scss';
-import { ItemThirteen } from './components/ItemThirteen';
 import { useAppDispatch, useAppSelector } from '@/core/store/hooks';
 import { getRoomsThunk } from './store/RoomsSlice';
 import { roomsSelector } from './store/RoomsSelector';
-import { useTranslation } from 'react-i18next';
-import { AnimatePresence, motion } from 'framer-motion';
-import { joinGameThunk } from '../Round/store/RoundSlice';
-import { initInitData } from '@telegram-apps/sdk-react';
+import { joinGameThunk } from '@/core/services/Game/GameSlice';
+
+import { ThirteenTop } from './components/ThirteenTop';
+import { ItemThirteen } from './components/ItemThirteen';
+
+import './styles/Rooms.scss';
 
 const cnRooms = cn('Rooms');
 
@@ -19,8 +21,11 @@ export const Rooms: FC = () => {
   const { t } = useTranslation('translation');
   const dispatch = useAppDispatch();
   const initData = initInitData();
+  const navigate = useNavigate();
 
   const rooms = useAppSelector(roomsSelector);
+
+  const [loadRoomId, setLoadRoomId] = useState<string>('');
 
   useEffect(() => {
     getRooms();
@@ -39,12 +44,24 @@ export const Rooms: FC = () => {
       return;
     }
 
+    setLoadRoomId(id);
+
     try {
-      await dispatch(
-        joinGameThunk({ gameId: id, telegramId: initData.user.id })
+      const res = await dispatch(
+        joinGameThunk({ roomId: id, telegramId: initData.user.id })
       ).unwrap();
+
+      if (res && res.id) {
+        const gameId = res.id;
+        const roundId = res.rounds[0].id;
+
+        navigate(`/games/${gameId}/round/${roundId}`);
+      }
+
+      setLoadRoomId('');
     } catch (error) {
       console.log('getRoomsThunk error', error);
+      setLoadRoomId('');
     }
   };
 
@@ -52,7 +69,6 @@ export const Rooms: FC = () => {
 
   return (
     <div className={cnRooms()}>
-      {JSON.stringify(sortedData)}
       <AnimatePresence initial={false}>
         <motion.div
           initial={{ opacity: 0, y: '10%' }}
@@ -63,7 +79,12 @@ export const Rooms: FC = () => {
           <ThirteenTop title={t('room-title')} />
           <div className={cnRooms('list')}>
             {sortedData.map((room) => (
-              <ItemThirteen key={room.id} item={room} join={join} />
+              <ItemThirteen
+                key={room.id}
+                item={room}
+                join={join}
+                loadRoomId={loadRoomId}
+              />
             ))}
           </div>
         </motion.div>
