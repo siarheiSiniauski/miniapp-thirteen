@@ -50,6 +50,10 @@ const roundSlice = createSlice({
 
       .addCase(countByGameIdThunk.fulfilled, (state, action) => {
         state.count = action.payload;
+      })
+
+      .addCase(countByGameIdThunk.rejected, (state) => {
+        state.count = 1;
       });
   },
 });

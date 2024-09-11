@@ -1,0 +1,23 @@
+export const numberArray: Array<{ key: string; value: number; title: string }> =
+  [
+    { key: 'one', value: 1, title: 'ONE' },
+    { key: 'two', value: 2, title: 'TWO' },
+    { key: 'three', value: 3, title: 'THREE' },
+    { key: 'four', value: 4, title: 'FOUR' },
+    { key: 'five', value: 5, title: 'FIVE' },
+    { key: 'six', value: 6, title: 'SIX' },
+    { key: 'seven', value: 7, title: 'SEVEN' },
+    { key: 'eight', value: 8, title: 'EIGHT' },
+    { key: 'nine', value: 9, title: 'NINE' },
+    { key: 'ten', value: 10, title: 'TEN' },
+    { key: 'eleven', value: 11, title: 'ELEVEN' },
+    { key: 'twelve', value: 12, title: 'TWELVE' },
+    { key: 'thirteen', value: 13, title: 'THIRTEEN' },
+    { key: 'fourteen', value: 14, title: 'FOURTEEN' },
+    { key: 'fifteen', value: 15, title: 'FIFTEEN' },
+    { key: 'sixteen', value: 16, title: 'SIXTEEN' },
+    { key: 'seventeen', value: 17, title: 'SEVENTEEN' },
+    { key: 'eighteen', value: 18, title: 'EIGHTEEN' },
+    { key: 'nineteen', value: 19, title: 'NINETEEN' },
+    { key: 'twenty', value: 20, title: 'TWENTY' },
+  ];

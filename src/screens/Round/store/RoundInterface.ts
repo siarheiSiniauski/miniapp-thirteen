@@ -1,3 +1,12 @@
+export type RoundStatus =
+  | 'RECRUITMENT'
+  | 'WAITING'
+  | 'READY'
+  | 'GAME'
+  | 'GAME_OVER';
+
+export type ParticipantStatus = 'DEAD' | 'ALIVE';
+
 export interface Participant {
   id: string;
   telegramId: number;
@@ -9,6 +18,7 @@ export interface Participant {
   isReady: boolean;
   shoot: string | null;
   created_at: Date;
+  status: ParticipantStatus;
 }
 
 export interface GamePlayer {
@@ -27,8 +37,24 @@ export interface Game {
 }
 
 export interface IRound {
-  id: string;
-  gameId: string;
-  participants: Participant[];
   game: Game;
+  gameId: string;
+  id: string;
+  nextRound: string | null;
+  participants: Participant[];
+  status: RoundStatus;
+}
+
+export class ParticipantModel {
+  id = '';
+  telegramId = 0;
+  position = 0;
+  name = '';
+  avatar = '';
+  isChamber = false;
+  isShoot = false;
+  isReady = false;
+  shoot = '';
+  created_at: Date = new Date();
+  status: ParticipantStatus = 'ALIVE';
 }

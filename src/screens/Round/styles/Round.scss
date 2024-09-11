@@ -6,19 +6,35 @@
   display: flex;
   flex-direction: column;
   position: relative;
-  padding: 50px 14px 40px;
+  padding: 20px 14px;
+  align-items: center;
+
+  &_loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
   &-wrap {
     position: relative;
-    margin-top: 24px;
+    margin-top: 20px;
+    max-width: 290px;
+    width: 100%;
   }
 
   &-arrow {
     position: absolute;
-    top: 37px;
+    top: 26px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 1;
+    max-width: 240px;
+    width: 100%;
+
+    svg {
+      width: 100%;
+      height: 100%;
+    }
   }
 
   &-lamp {
@@ -26,6 +42,7 @@
     top: 37px;
     left: 50%;
     transform: translateX(-50%);
+    max-width: 70px;
   }
 
   &-shooters {
@@ -33,6 +50,8 @@
     display: flex;
     flex-wrap: wrap;
     z-index: 5;
+    min-height: 445px;
+    margin-bottom: 20px;
   }
 
   &-shooter {
@@ -105,7 +124,6 @@
       order: 13;
       width: 100%;
       justify-content: center;
-      margin-top: -35px;
     }
   }
 
@@ -120,7 +138,7 @@
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    bottom: 200px;
+    top: 220px;
     &_waiting {
       max-width: 190px;
       color: #fff;
@@ -134,6 +152,8 @@
 
   &-action {
     margin-top: auto;
+    width: 100%;
+    max-width: 300px;
   }
 
   &-btn {
@@ -210,16 +230,20 @@
   &-info {
     position: absolute;
     z-index: 0;
-    left: 50%;
-    transform: translateX(calc(-50% - 30px));
     display: flex;
+    justify-content: center;
     align-items: center;
-    bottom: 10px;
+    max-width: 241px;
+    width: 100%;
+    top: 242px;
   }
 
   &-revolver {
-    width: 229px;
     position: relative;
+  }
+
+  &-pic {
+    max-width: 200px;
   }
 
   &-patrons {

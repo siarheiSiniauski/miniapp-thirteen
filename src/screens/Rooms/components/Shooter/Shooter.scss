@@ -1,6 +1,6 @@
 .Shooter {
-  width: 74px;
-  height: 74px;
+  width: 54px;
+  height: 54px;
   background-color: #000;
   border: 1px solid rgba(255, 255, 255, 0.13);
   border-radius: 50%;
@@ -10,25 +10,25 @@
   position: relative;
 
   &_active {
-    width: 116px;
-    height: 116px;
+    width: 80px;
+    height: 80px;
   }
 
   &-avatar {
     overflow: hidden;
-    width: 64px;
-    height: 64px;
+    min-width: 46px;
+    height: 46px;
     border-radius: 50%;
 
     img {
       object-fit: cover;
-      width: 64px;
-      height: 64px;
+      width: 46px;
+      height: 46px;
     }
 
     &_active {
-      width: 100px;
-      height: 100px;
+      min-width: 80px;
+      height: 80px;
 
       img {
         object-fit: cover;
@@ -83,6 +83,26 @@
         animation: spin 1s linear infinite;
       }
     }
+  }
+
+  &-position {
+    position: absolute;
+    left: -2px;
+    bottom: -2px;
+    color: #fff;
+    font-family: 'Roboto Mono';
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.43px;
+    width: 24px;
+    height: 24px;
+    background-color: #000;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 
